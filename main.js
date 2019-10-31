@@ -13,6 +13,7 @@ let scoreImg;
 let blink = 0;
 let myDiv;
 let gameOverImg;
+let blinkTwo = false;
 
 const game = new Game();
 
@@ -27,7 +28,7 @@ function preload() {
   ammoImg = loadImage("assets/rickAndMorty/ammoTotal.png");
   scoreImg = loadImage("assets/rickAndMorty/score.png");
   gameOverImg = loadImage("assets/rickAndMorty/gameOver.png");
-//   myDiv = createDiv('this is some text')
+    
 }
 let cnv;
 
@@ -35,20 +36,28 @@ function centerCanvas() {
   let x = (windowWidth - width) / 2;
   let y = (windowHeight - height) / 2;
   cnv.position(x, y);
+  
 }
+
+function placeButtons() {
+    let y = (windowHeight - 80);
+    buttonRetry.position(90, y);
+    buttonMute.position(20, y);
+  }
 
 function setup() {
   console.log("setup");
   mode = 0;
   buttonMute = createImg("assets/rickAndMorty/mute.png", "pause");
-  buttonMute.position(20, 750);
+//   buttonMute.position(20, 750);
   buttonRetry = createImg("assets/rickAndMorty/retry.png", "pause");
-  buttonRetry.position(90, 750);
+//   buttonRetry.position(90, 750);
   introSong.setVolume(0.5);
   introSong.loop();
   imgIntro = loadImage("assets/rickAndMorty/backgroundIntro.png");
   textFont("Helvetica");
   cnv = createCanvas(360, 540);
+  placeButtons();
   centerCanvas();
   game.setup();
   buttonMute.mouseClicked(muteAllSounds);
@@ -59,6 +68,21 @@ function windowResized() {
   centerCanvas();
 }
 
+function blinkEnter(){
+    // let x = (windowWidth - windowWidth/2);
+    // let y = (windowHeight - height);
+    // if (blinkTwo === false){
+    // myDiv = createDiv('this is some text')
+    // myDiv.position(x, y);
+    // // create(`Press enter to get schwifty !`, 40, 450);
+    // blinkTwo = true;
+    // }else{
+    //     myDiv.remove();
+    //     blinkTwo = false;
+    // }
+
+}
+
 function draw() {
   clear();
   // console.log("draw");
@@ -66,19 +90,25 @@ function draw() {
   if (mode === 0) {
     clear();
     playRightSong(introSong);
-    textSize(25);
+    textSize(18);
     image(imgIntro, 0, 0);
-    if (blink % 60 === 0){
-        text(`Press enter to get schwifty !`, 40, 450);
-      } else if(blink % 60 === 0){
-        // text.remove();
-      }
+    textFont("Helvetica");
+
+    // if (blink % 60 === 0 || blink % 61 === 0 || blink % 62 === 0 || blink % 63 === 0 || blink % 64 === 0 || blink % 65 === 0 || blink % 66 === 0 || blink % 67 === 0 || blink % 68 === 0 || blink % 69 === 0 ||blink % 70 === 0){
+        text(`Press enter to get schwifty !`, 80, 420);
+        // textAlign(LEFT);
+        // blinkEnter();
+    //   }
+    
+      placeButtons();
+      centerCanvas();
     
   }
   if (mode === 1) {
     clear();
     playRightSong(gameMusic);
     game.draw();
+    textFont("Helvetica");
     textSize(20);
     fill(169, 209, 239);
     image(scoreImg, 7, 0);
@@ -92,9 +122,10 @@ function draw() {
   if (mode === 2) {
     clear();
     playRightSong(gameOverSong);
-    textSize(25);
+    textFont("Hel5vetica");
+    textSize(20);
     image(gameOverImg, 0, 0);
-    text(`or press 'r'...`, 21, 265);
+    text(`or press 'r'...`, 21, 255);
   }
 }
 

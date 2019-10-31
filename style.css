@@ -13,3 +13,21 @@
   bottom: 0;
   right: 0;
 }
+
+#commands {
+    position: fixed;
+    padding: 30px;
+    top: 0;
+    left: 0;
+  }
+
+  #instructions {
+      font-family: Helvetica, Arial , sans-serif;
+      font: bold;
+      font-size: 14pt;
+      width: 200px;
+    position: fixed;
+    padding: 30px;
+    top: 0;
+    right: 0;
+  }
