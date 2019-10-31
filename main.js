@@ -10,6 +10,9 @@ let gifCreateImg;
 let muted = false;
 let ammoImg;
 let scoreImg;
+let blink = 0;
+let myDiv;
+let gameOverImg;
 
 const game = new Game();
 
@@ -23,6 +26,8 @@ function preload() {
   );
   ammoImg = loadImage("assets/rickAndMorty/ammoTotal.png");
   scoreImg = loadImage("assets/rickAndMorty/score.png");
+  gameOverImg = loadImage("assets/rickAndMorty/gameOver.png");
+//   myDiv = createDiv('this is some text')
 }
 let cnv;
 
@@ -57,12 +62,18 @@ function windowResized() {
 function draw() {
   clear();
   // console.log("draw");
+  blink = blink + 1;
   if (mode === 0) {
     clear();
     playRightSong(introSong);
     textSize(25);
     image(imgIntro, 0, 0);
-    text(`Press enter to get schwifty !`, 40, 450);
+    if (blink % 60 === 0){
+        text(`Press enter to get schwifty !`, 40, 450);
+      } else if(blink % 60 === 0){
+        // text.remove();
+      }
+    
   }
   if (mode === 1) {
     clear();
@@ -82,8 +93,8 @@ function draw() {
     clear();
     playRightSong(gameOverSong);
     textSize(25);
-    image(imgIntro, 0, 0);
-    text(`Game Over`, 40, 450);
+    image(gameOverImg, 0, 0);
+    text(`or press 'r'...`, 21, 265);
   }
 }
 
@@ -147,11 +158,10 @@ function keyPressed() {
   if (keyCode === 82) {
     replay();
   }
-  if (keyCode === ENTER) {
+  if (keyCode === ENTER && mode===0) {
     mode = 1;
   }
   if (keyCode === 38) {
     game.player.shoot();
-    console.log("shoot");
   }
 }
