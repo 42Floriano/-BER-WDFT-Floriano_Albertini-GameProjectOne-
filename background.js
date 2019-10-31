@@ -6,7 +6,6 @@ class Background {
     console.log("background preload");
     this.bg = loadImage("assets/screenItems/background.jpg");
   }
-
   draw() {
     image(this.bg, this.xGrid, 0, width); //width comes from p5;
   }

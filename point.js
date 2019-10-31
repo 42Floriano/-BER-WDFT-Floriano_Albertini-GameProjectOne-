@@ -1,5 +1,4 @@
 class Point {
-  //
   constructor() {
     this.y = 0; // canvas height
     this.img = loadImage("assets/rickAndMorty/pointMS.png");

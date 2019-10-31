@@ -3,12 +3,13 @@ let gameMusic;
 let gameOverSong;
 let currentSong;
 let mode;
-let button;
-let buttonPause;
-let buttonPlay;
+let buttonMute;
 let buttonRetry;
 let gifLoadImg;
 let gifCreateImg;
+let muted = false;
+let ammoImg;
+let scoreImg;
 
 const game = new Game();
 
@@ -17,17 +18,11 @@ function preload() {
   game.preload();
   introSong = loadSound("assets/rickAndMorty/sounds/rickandmortySong.mp3");
   gameMusic = loadSound("assets/rickAndMorty/sounds/gameMusic.mp3");
-  gameOverSong = loadSound("assets/rickAndMorty/sounds/rickAndMortyGameOver.mp3");
-
-//   gifLoadImg = loadImage("assets/rickAndMorty/gif/static1.gif");
-    gifCreateImg = createVideo('assets/rickAndMorty/videos/static3.mp4');
-    // gifCreateImg.resize(100%, 100%);
-    // gifCreateImg.hide();
-    gifCreateImg.loop();
-
-  buttonPlay = loadImage("assets/rickAndMorty/play.png");
-  buttonPause = loadImage("assets/rickAndMorty/pause.png");
-  //   buttonRetry = loadImage('assets/rickAndMorty/retryButton.png');
+  gameOverSong = loadSound(
+    "assets/rickAndMorty/sounds/rickAndMortyGameOver.mp3"
+  );
+  ammoImg = loadImage("assets/rickAndMorty/ammoTotal.png");
+  scoreImg = loadImage("assets/rickAndMorty/score.png");
 }
 let cnv;
 
@@ -38,54 +33,21 @@ function centerCanvas() {
 }
 
 function setup() {
+  console.log("setup");
   mode = 0;
-  button = createImg("assets/rickAndMorty/pause.png", "pause");
-  
-  button.position(20, 700);
-  console.log(button);
+  buttonMute = createImg("assets/rickAndMorty/mute.png", "pause");
+  buttonMute.position(20, 750);
+  buttonRetry = createImg("assets/rickAndMorty/retry.png", "pause");
+  buttonRetry.position(90, 750);
   introSong.setVolume(0.5);
   introSong.loop();
-
   imgIntro = loadImage("assets/rickAndMorty/backgroundIntro.png");
   textFont("Helvetica");
-
-  //   cnv = createCanvas(360, 540);
-  //   textSize(21);
-
-  console.log("setup");
   cnv = createCanvas(360, 540);
   centerCanvas();
   game.setup();
-  button.mouseClicked(togglePlaying);
-}
-
-function togglePlaying() {
-  sound.setVolume(0);
-  console.log("test");
-  if (sound.volume === true) {
-    sound.setVolume(0);
-    // button.image('assets/rickAndMorty/play.png', "play");
-  } else {
-    introSong.loop();
-    introSong.setVolume(0.5);
-    button = buttonPlay;
-    // button.image('assets/rickAndMorty/pause.png', "pause");
-  }
-}
-
-function togglePlaying() {
-  sound.setVolume(0);
-  console.log("test");
-  if (introSong.isPlaying() === true) {
-    introSong.pause();
-    button = buttonPause;
-    // button.image('assets/rickAndMorty/play.png', "play");
-  } else {
-    introSong.loop();
-    introSong.setVolume(0.5);
-    button = buttonPlay;
-    // button.image('assets/rickAndMorty/pause.png', "pause");
-  }
+  buttonMute.mouseClicked(muteAllSounds);
+  buttonRetry.mouseClicked(replay);
 }
 
 function windowResized() {
@@ -97,8 +59,6 @@ function draw() {
   // console.log("draw");
   if (mode === 0) {
     clear();
-    // image(gifCreateImg, 0, 0);
-    gifCreateImg.position(window.innerWidth / 2 - gifCreateImg.width / 2, window.innerHeight / 2  - gifCreateImg.height /2)
     playRightSong(introSong);
     textSize(25);
     image(imgIntro, 0, 0);
@@ -106,49 +66,87 @@ function draw() {
   }
   if (mode === 1) {
     clear();
-    // gifCreateImg.remove()
     playRightSong(gameMusic);
     game.draw();
+    textSize(20);
+    fill(169, 209, 239);
+    image(scoreImg, 7, 0);
+    text(' '+ game.player.score, 59, 30);
+    textSize(30);
+    fill(169, 209, 239);
+    image(ammoImg, 7, 490);
+    text(' '+ game.player.ammo, 59, 522);
   }
 
   if (mode === 2) {
     clear();
     playRightSong(gameOverSong);
     textSize(25);
-    // image(gifCreateImg, 0, 0);
-    // gifCreateImg.loop();
     image(imgIntro, 0, 0);
-    buttonRetry = createImg("assets/rickAndMorty/retryButton.png");
-    buttonRetry.position(20, 450);
     text(`Game Over`, 40, 450);
   }
 }
 
 function playRightSong(sound) {
-  // console.log(introSong.isPlaying())
   if (sound === introSong && !introSong.isPlaying()) {
     console.log("test");
     introSong.loop();
-    introSong.setVolume(0.2);
-    // currentSong = introSong;
+    introSong.setVolume(0.4);
   } else if (sound === gameMusic && gameMusic.isPlaying() === false) {
     console.log("GAME MUSIC  ", gameMusic.isPlaying());
     introSong.stop();
     gameOverSong.stop();
-    gameMusic.play();
     gameMusic.setVolume(0.4);
+    gameMusic.play();
     currentSong = gameMusic;
   } else if (sound === gameOverSong && gameOverSong.isPlaying() === false) {
     console.log("END GAME SOUND ", gameOverSong);
     gameMusic.stop();
-
     currentSong = gameOverSong;
-    gameOverSong.play();
     gameOverSong.setVolume(1);
+    gameOverSong.play();
   }
 }
 
+function muteAllSounds() {
+  if (muted === true) {
+    introSong.setVolume(0.4);
+    gameMusic.setVolume(0.4);
+    gameOverSong.setVolume(1);
+    coinsSound.setVolume(1);
+    mortySound.setVolume(1);
+    popSound.setVolume(1);
+    laserSound.setVolume(1);
+    muted = false;
+  } else {
+    introSong.setVolume(0);
+    gameMusic.setVolume(0);
+    gameOverSong.setVolume(0);
+    coinsSound.setVolume(0);
+    mortySound.setVolume(0);
+    popSound.setVolume(0);
+    laserSound.setVolume(0);
+    muted = true;
+  }
+}
+function replay() {
+  console.log("tried to reload, biotch");
+  mode = 1;
+  game.obstacles = [];
+  game.points = [];
+  game.difficulty = 60;
+  speed = 4;
+  game.player.ammo = 5;
+  game.player.score = 0;
+}
+
 function keyPressed() {
+  if (keyCode === 77) {
+    muteAllSounds();
+  }
+  if (keyCode === 82) {
+    replay();
+  }
   if (keyCode === ENTER) {
     mode = 1;
   }
@@ -156,9 +154,4 @@ function keyPressed() {
     game.player.shoot();
     console.log("shoot");
   }
-
-
-  
 }
-
-
