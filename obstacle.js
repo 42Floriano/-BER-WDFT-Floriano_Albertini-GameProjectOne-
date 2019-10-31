@@ -1,3 +1,4 @@
+let speed = 4;
 class Obstacle {
   //
   constructor() {
@@ -18,8 +19,13 @@ class Obstacle {
     console.log("obstacle setup");
   }
 
+
+
   draw() {
     image(this.img, this.x, this.y, 63, 69);
-    this.y += 4;
+    if (frameCount > 240 && frameCount % 300  === 0 && speed < 14 ) {
+      speed +=0.05;
+    }
+    this.y += speed;
   }
 }

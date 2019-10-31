@@ -27,7 +27,7 @@ preload() {
     // console.log(this.x, this.y);
 
     image(this.img, this.x, this.y, 63, 69 );
-    this.y -= 6;
+    this.y -= 12;
   }
 
 //   draw(playerX,playerHeight) {

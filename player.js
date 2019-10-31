@@ -1,3 +1,5 @@
+let popSound;
+let laserSound;
 class Player {
   constructor() {
     this.x = 0;
@@ -9,6 +11,8 @@ class Player {
   }
 
   preload() {
+    popSound  = loadSound('assets/rickAndMorty/sounds/popPiece.mp3');
+    laserSound  = loadSound('assets/rickAndMorty/sounds/laserShot.mp3')
     this.laser.preload();
     console.log("player preload");
     this.img = loadImage("assets/rickAndMorty/playerMorty.png");
@@ -70,6 +74,7 @@ class Player {
                     game.player.lasers.splice(index, 1);
                     game.obstacles.splice(indexO, 1)
                     game.player.score++;
+                    popSound.play();
                 }
             })
 
@@ -85,6 +90,7 @@ class Player {
         laser.setup(this.x, this.height)
         this.lasers.push(laser);
         this.ammo -= 1;
+        laserSound.play();
         console.log(this.ammo) 
         } else {
             console.log("RELOADING");      

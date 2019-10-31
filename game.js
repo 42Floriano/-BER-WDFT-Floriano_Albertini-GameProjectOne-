@@ -1,3 +1,6 @@
+let coinsSound;
+let mortySound;
+let difficulty = 60;
 
 class Game {
   constructor() {
@@ -18,53 +21,49 @@ class Game {
     this.background.preload();
     this.player.preload();
     this.laser.preload();
-
+    coinsSound = loadSound("assets/rickAndMorty/sounds/coinsPickUp.mp3");
+    mortySound = loadSound("assets/rickAndMorty/sounds/mortyTouched.mp3");
   }
   setup() {
     console.log("game setup");
     this.player.setup();
-
-    // this.laser.setup();
   }
   draw() {
     this.background.draw();
     this.player.draw();
-
-
-
-    if (frameCount > 240 && frameCount % 60 === 0) {
-    //   console.log("create new obstacle");
+    if (frameCount > 240 &&  frameCount % 300 === 0 && difficulty > 30){
+        difficulty--;
+        console.log(difficulty);
+    }
+    if (frameCount > 240 && frameCount % difficulty === 0) {
+      //   console.log("create new obstacle");
       this.obstacles.push(new Obstacle());
     }
-
     this.obstacles.forEach(
       function(obstacle, index) {
         // obstacle.preload();
         // obstacle.setup();
         obstacle.draw();
-
         if (obstacle.y - obstacle.height > height) {
           //remove obstacle
           this.obstacles.splice(index, 1);
         }
-
         if (this.isCollision(obstacle, this.player)) {
           console.log("GAME OVER");
+          noLoop();
+          mortySound.play();
+          setTimeout(function(){ 
+            }, 3000);
           mode = 2;
-            noLoop();
         }
       }.bind(this)
     );
-
-
-
-
 
     if (
       frameCount > 240 &&
       frameCount % (120 + -Math.floor(Math.random() * 60)) === 0
     ) {
-    //   console.log("create new point");
+      //   console.log("create new point");
       this.points.push(new Point());
     }
 
@@ -82,6 +81,7 @@ class Game {
         if (this.isCollisionPoint(point, this.player)) {
           this.points.splice(index, 1);
           this.player.score++;
+          coinsSound.play();
         }
       }.bind(this)
     );
@@ -91,9 +91,9 @@ class Game {
   isCollision(obstacle, player) {
     if (
       player.x + player.width / 1.3 < obstacle.x ||
-      obstacle.x + player.width / 1.3 < player.x 
+      obstacle.x + player.width / 1.3 < player.x
     ) {
-        // console.log("salut" +player.width)
+      // console.log("salut" +player.width)
       return false;
     }
     if (
@@ -120,5 +120,4 @@ class Game {
     }
     return true;
   }
-
 }
