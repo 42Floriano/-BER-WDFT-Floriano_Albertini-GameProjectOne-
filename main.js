@@ -158,40 +158,7 @@ function keyPressed() {
   }
 
 
-  function count (string) {  
-    let result = [];
-    let current = null;
-    let obj = {};
-    let count = 0;
-    if(string.length() === 0) {
-    return obj;
-    }else {
-    for(let i = 0, i < string.length; i ++){
-      result.push(string.charAt(i));
-      }
-      result.sort();
-    
-    for (let i = 0; i < result.length; i++) {
-            if (result[i] != current) {
-                if (count > 0) {
-                    document.write(current + ' comes --> ' + count + ' times<br>');
-                }
-                current = result[i];
-                count = 1;
-            } else {
-                count++;
-            }
-            if (count > 0) {
-            obj[current] = count;
-        }
-        return obj;
-        }
-    }
-    }
-
-
-
-
+  
 }
 
 
